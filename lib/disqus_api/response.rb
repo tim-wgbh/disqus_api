@@ -7,7 +7,11 @@ module DisqusApi
     def initialize(request, arguments = {})
       @request   = request
       @arguments = arguments
-      @content   = request.perform(@arguments)
+      response   = request.perform(@arguments) 
+      headers    = {
+        :ratelimit_headers => response.env[:response_headers].extract!("x-ratelimit-remaining", "x-ratelimit-limit", "x-ratelimit-reset")
+      }
+      @content   = headers.merge(response.body)
 
       super(@content)
     end

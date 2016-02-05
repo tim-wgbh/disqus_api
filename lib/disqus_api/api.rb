@@ -42,7 +42,9 @@ module DisqusApi
     # @param [String] path
     # @param [Hash] arguments
     def get(path, arguments = {})
-      perform_request { connection.get(path, arguments).body }
+      response = connection.get(path, arguments)
+      perform_request { response.body }
+      response
     end
 
     # Performs custom POST request
